@@ -102,8 +102,11 @@ const togglePasswordVisibility = () => {
   <div class="account-item">
     <el-input
       v-model="labelsText"
+      type="textarea"
+      :rows="2"
       placeholder="Значение"
       maxlength="50"
+      resize="none"
       @blur="onLabelsBlur"
       class="label-input"
     />
@@ -156,7 +159,7 @@ const togglePasswordVisibility = () => {
 <style scoped>
 .account-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   padding: 8px 0;
 }
