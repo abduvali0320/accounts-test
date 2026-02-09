@@ -37,7 +37,7 @@ const loadFromStore = () => {
 
 loadFromStore()
 
-const showPasswordField = computed(() => type.value === 'LOCAL')
+const isLocal = computed(() => type.value === 'LOCAL')
 
 const validate = (): boolean => {
   errors.value.login = !login.value.trim()
@@ -121,37 +121,26 @@ const togglePasswordVisibility = () => {
       v-model="login"
       placeholder="Значение"
       maxlength="100"
-      :class="{ 'is-error': errors.login }"
+      :class="['login-input', { 'is-error': errors.login, 'login-expanded': !isLocal }]"
       @blur="onLoginBlur"
-      class="login-input"
     />
 
-    <div class="password-wrapper">
-      <template v-if="showPasswordField">
-        <el-input
-          v-model="password"
-          :type="showPassword ? 'text' : 'password'"
-          placeholder="Значение"
-          maxlength="100"
-          :class="{ 'is-error': errors.password }"
-          @blur="onPasswordBlur"
-          class="password-input"
-        >
-          <template #suffix>
-            <el-icon
-              class="password-toggle"
-              @click="togglePasswordVisibility"
-            >
-              <View v-if="!showPassword" />
-              <Hide v-else />
-            </el-icon>
-          </template>
-        </el-input>
+    <el-input
+      v-if="isLocal"
+      v-model="password"
+      :type="showPassword ? 'text' : 'password'"
+      placeholder="Значение"
+      maxlength="100"
+      :class="['password-input', { 'is-error': errors.password }]"
+      @blur="onPasswordBlur"
+    >
+      <template #suffix>
+        <el-icon class="password-toggle" @click="togglePasswordVisibility">
+          <View v-if="!showPassword" />
+          <Hide v-else />
+        </el-icon>
       </template>
-      <template v-else>
-        <div class="password-placeholder"></div>
-      </template>
-    </div>
+    </el-input>
 
     <el-button
       type="danger"
@@ -184,17 +173,12 @@ const togglePasswordVisibility = () => {
   width: 140px;
 }
 
-.password-wrapper {
-  width: 160px;
+.login-expanded {
+  width: 312px;
 }
 
 .password-input {
-  width: 100%;
-}
-
-.password-placeholder {
-  width: 100%;
-  height: 32px;
+  width: 160px;
 }
 
 .password-toggle {
